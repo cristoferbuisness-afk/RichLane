@@ -1,81 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rich Lane</title>
 
-  <meta name="description" content="Rich Lane represents discipline, focus, and earned position. Premium apparel for those who lead with confidence and move with intention. Not for everyone.">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="Rich Lane clothes Photo Clouds.png">
-  <link rel="apple-touch-icon" href="Rich Lane clothes Photo Clouds.png">
+<title>Rich Lane</title>
 
-  <style>
-    body {
-      margin: 0;
-      background-color: black;
-      color: white;
-      font-family: Helvetica, Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
+<meta name="description" content="Rich Lane represents discipline, focus, and earned position. Premium apparel for those who lead with confidence and move with intention. Not for everyone.">
 
-    .container {
-      max-width: 900px;
-    }
+<link rel="canonical" href="https://cristoferbuisness-afk.github.io/RichLane/">
 
-    img {
-      width: 320px;
-      margin-bottom: 40px;
-    }
+<link rel="shortcut icon" type="image/x-icon" href="Rich Lane clothes Photo Clouds.png">
+<link rel="apple-touch-icon" href="Rich Lane clothes Photo Clouds.png">
 
-    h1 {
-      font-size: 52px;
-      letter-spacing: 8px;
-      margin: 0;
-    }
+<style>
+body {
+    margin: 0;
+    background-color: black;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+    overflow: hidden;
+}
 
-    p {
-      font-size: 18px;
-      opacity: 0.8;
-      margin-top: 12px;
-    }
+.hero {
+    position: relative;
+    height: 100vh;
+    background: url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-    .coming-soon {
-      margin-top: 30px;
-      opacity: 0;
-      letter-spacing: 4px;
-      animation: fadeUp 2s ease forwards;
-      animation-delay: 1.5s;
-    }
+.overlay {
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    inset: 0;
+}
 
-    @keyframes fadeUp {
-      from {
+.content {
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease forwards;
+}
+
+h1 {
+    font-size: 64px;
+    letter-spacing: 10px;
+    margin: 0;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 15px;
+    opacity: 0.85;
+}
+
+@keyframes fadeIn {
+    from {
         opacity: 0;
         transform: translateY(20px);
-      }
-      to {
-        opacity: 0.5;
-        transform: translateY(0);
-      }
     }
-  </style>
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
 </head>
 
 <body>
-  <div class="container">
-    <img src="Rich Lane clothes Photo Clouds.png" alt="Rich Lane">
 
-    <h1>RICH LANE</h1>
+<div class="hero">
+    <div class="overlay"></div>
 
-    <p>Discipline. Precision. Position.</p>
-    <p>Not for everyone.</p>
+    <div class="content">
+        <h1>RICH LANE</h1>
+        <p>Discipline. Precision. Position.</p>
+        <p>Not for everyone.</p>
+    </div>
+</div>
 
-    <p class="coming-soon">COMING SOON</p>
-  </div>
 </body>
 </html>
