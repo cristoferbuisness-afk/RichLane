@@ -18,17 +18,21 @@ overflow:hidden;
 cursor:none;
 }
 
-/* CUSTOM GOLD CURSOR */
+/* GOLD & RED */
+.gold{color:#d4af37;}
+.red{color:#ff4d4d;}
+
+/* CURSOR */
 .cursor{
 position:fixed;
-width:24px;
-height:24px;
+width:20px;
+height:20px;
 border:2px solid #d4af37;
 border-radius:50%;
 pointer-events:none;
 transform:translate(-50%,-50%);
 z-index:9999;
-box-shadow:0 0 20px rgba(212,175,55,.6);
+box-shadow:0 0 15px rgba(212,175,55,.7);
 }
 
 /* BACKGROUND */
@@ -41,7 +45,6 @@ left:-5%;
 background:url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
 filter:brightness(.45);
 z-index:-3;
-transition:.2s ease;
 }
 
 .overlay{
@@ -50,17 +53,6 @@ width:100%;
 height:100%;
 background:radial-gradient(circle at center, rgba(0,0,0,.4), #000 85%);
 z-index:-1;
-}
-
-.fog{
-position:fixed;
-width:200%;
-height:200%;
-top:-50%;
-left:-50%;
-background:radial-gradient(circle at center, rgba(255,255,255,.06), transparent 60%);
-z-index:-2;
-transition:.3s ease;
 }
 
 /* SECTIONS */
@@ -73,7 +65,7 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-transition:1.2s ease;
+transition:1s ease;
 padding:20px;
 }
 
@@ -92,29 +84,32 @@ margin-bottom:10px;
 }
 
 .title{
-font-size:20px;
+font-size:18px;
 letter-spacing:6px;
 opacity:.8;
-margin-bottom:25px;
+margin-bottom:20px;
 }
 
-.enter-btn, button{
-padding:14px 45px;
+/* BUTTONS */
+button{
+padding:14px 40px;
 border-radius:50px;
 border:none;
-font-size:13px;
+font-size:12px;
 letter-spacing:3px;
 cursor:pointer;
 background:linear-gradient(45deg,#d4af37,#f5d77a);
 color:#000;
-transition:.4s;
+transition:.3s;
+margin-top:10px;
 }
 
-.enter-btn:hover, button:hover{
-transform:scale(1.1);
-box-shadow:0 0 30px rgba(212,175,55,.6);
+button:hover{
+transform:scale(1.07);
+box-shadow:0 0 25px rgba(212,175,55,.6);
 }
 
+/* COUNTDOWN */
 .countdown{
 display:flex;
 gap:15px;
@@ -123,61 +118,81 @@ margin:25px 0;
 
 .countdown div{
 background:rgba(255,255,255,.05);
-padding:15px 20px;
+padding:15px 18px;
 border-radius:20px;
-min-width:60px;
+min-width:55px;
 }
 
+/* INPUT */
 input{
 padding:12px 20px;
 border-radius:30px;
 border:none;
-margin-top:15px;
-width:260px;
+margin-top:10px;
+width:250px;
 text-align:center;
 outline:none;
 }
 
+/* TEXT */
 .message{
+margin-top:10px;
+font-size:14px;
+}
+
+.remaining{
+margin-top:8px;
+font-size:12px;
+opacity:.7;
+}
+
+/* SHOP */
+.shop{
+opacity:0;
+transform:scale(.95);
+transition:1s ease;
+margin-top:20px;
+}
+
+.shop.show{
+opacity:1;
+transform:scale(1);
+}
+
+.product{
+background:rgba(255,255,255,.05);
+padding:20px;
+border-radius:20px;
 margin-top:15px;
-font-size:13px;
-opacity:.9;
 }
 
-/* GLITCH */
-.glitch{
-animation:glitch .2s infinite;
+/* INSTAGRAM */
+.instagram-link{
+margin-top:25px;
+font-size:14px;
+letter-spacing:2px;
+color:#d4af37;
+text-decoration:none;
+transition:.3s ease;
+display:inline-block;
 }
 
-@keyframes glitch{
-0%{transform:translate(2px,-2px)}
-50%{transform:translate(-2px,2px)}
-100%{transform:translate(0)}
-}
-
-/* PARTICLES */
-.particle{
-position:fixed;
-width:6px;
-height:6px;
-background:#d4af37;
-border-radius:50%;
-pointer-events:none;
-z-index:999;
+.instagram-link:hover{
+text-shadow:0 0 12px rgba(212,175,55,.8);
+transform:scale(1.05);
 }
 </style>
 </head>
 <body>
 
 <div class="cursor" id="cursor"></div>
-<div class="background" id="bg"></div>
-<div class="fog" id="fog"></div>
+<div class="background"></div>
 <div class="overlay"></div>
 
 <!-- INTRO -->
 <section id="intro">
 <h1 class="brand">RICH LANE</h1>
-<button class="enter-btn" onclick="enterSite()">ENTER</button>
+<button onclick="enterSite()">ENTER</button>
 </section>
 
 <!-- EARLY ACCESS -->
@@ -193,10 +208,32 @@ z-index:999;
 <div><span id="seconds">0</span><br>S</div>
 </div>
 
+<div class="remaining" id="remainingText"></div>
+
 <input type="email" id="email" placeholder="Enter your email">
-<br>
-<button onclick="generateCode()">Request Early Access</button>
+<button onclick="generateCode()">Request Code</button>
+
+<input type="text" id="codeInput" placeholder="Enter your code">
+<button onclick="validateCode()">Unlock Access</button>
+
 <div class="message" id="msg"></div>
+
+<div class="shop" id="shop">
+<h2 class="gold">EARLY ACCESS SHOP</h2>
+<div class="product">
+Luxury Hoodie – Early Drop Edition  
+<br><br>
+<button>Pre-Order</button>
+</div>
+</div>
+
+<a href="https://www.instagram.com/richlaneco/" 
+   target="_blank" 
+   rel="noopener noreferrer"
+   class="instagram-link">
+   Follow us on Instagram @RichLaneCo
+</a>
+
 </section>
 
 <script>
@@ -208,61 +245,13 @@ cursor.style.left=e.pageX+"px";
 cursor.style.top=e.pageY+"px";
 });
 
-/* PARALLAX + FOG */
-const bg=document.getElementById("bg");
-const fog=document.getElementById("fog");
-
-document.addEventListener("mousemove",e=>{
-let x=(window.innerWidth/2 - e.pageX)/40;
-let y=(window.innerHeight/2 - e.pageY)/40;
-bg.style.transform=`translate(${x}px,${y}px) scale(1.05)`;
-fog.style.transform=`translate(${x*2}px,${y*2}px)`;
-});
-
-/* PARTICLE EXPLOSION */
-function explode(x,y){
-for(let i=0;i<40;i++){
-let p=document.createElement("div");
-p.className="particle";
-document.body.appendChild(p);
-p.style.left=x+"px";
-p.style.top=y+"px";
-let angle=Math.random()*2*Math.PI;
-let dist=80+Math.random()*120;
-let dx=Math.cos(angle)*dist;
-let dy=Math.sin(angle)*dist;
-p.animate([{transform:"translate(0,0)",opacity:1},
-{transform:`translate(${dx}px,${dy}px)`,opacity:0}],
-{duration:1000,easing:"ease-out"});
-setTimeout(()=>p.remove(),1000);
-}
-}
-
-/* HEARTBEAT SOUND */
-function heartbeat(){
-let ctx=new (window.AudioContext||window.webkitAudioContext)();
-setInterval(()=>{
-let osc=ctx.createOscillator();
-let gain=ctx.createGain();
-osc.frequency.value=45;
-gain.gain.value=.4;
-gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+.5);
-osc.connect(gain);
-gain.connect(ctx.destination);
-osc.start();
-osc.stop(ctx.currentTime+.5);
-},2000);
-}
-
 /* ENTER */
 function enterSite(){
-explode(window.innerWidth/2,window.innerHeight/2);
-heartbeat();
-intro.classList.add("hidden");
-early.classList.remove("hidden");
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("early").classList.remove("hidden");
 }
 
-/* COUNTDOWN 5 MONTHS FROM NOW */
+/* COUNTDOWN */
 const dropDate=new Date();
 dropDate.setMonth(dropDate.getMonth()+5);
 
@@ -270,40 +259,66 @@ setInterval(()=>{
 let now=new Date().getTime();
 let dist=dropDate-now;
 
-if(dist<=0){
-document.querySelector(".title").classList.add("glitch");
-return;
-}
-
-months.innerHTML=Math.floor(dist/(1000*60*60*24*30));
-days.innerHTML=Math.floor((dist%(1000*60*60*24*30))/(1000*60*60*24));
-hours.innerHTML=Math.floor((dist%(1000*60*60*24))/(1000*60*60));
-minutes.innerHTML=Math.floor((dist%(1000*60*60))/(1000*60));
-seconds.innerHTML=Math.floor((dist%(1000*60))/1000);
-
+document.getElementById("months").innerHTML=Math.floor(dist/(1000*60*60*24*30));
+document.getElementById("days").innerHTML=Math.floor((dist%(1000*60*60*24*30))/(1000*60*60*24));
+document.getElementById("hours").innerHTML=Math.floor((dist%(1000*60*60*24))/(1000*60*60));
+document.getElementById("minutes").innerHTML=Math.floor((dist%(1000*60*60))/(1000*60));
+document.getElementById("seconds").innerHTML=Math.floor((dist%(1000*60))/1000);
 },1000);
 
-/* EARLY ACCESS CODES */
-let totalCodes=333;
-let used=0;
+/* EARLY ACCESS SYSTEM */
+const TOTAL_CODES=150;
+let codes=JSON.parse(localStorage.getItem("rl_codes"))||[];
+
+function updateRemaining(){
+document.getElementById("remainingText").innerText=
+"Limited spots remaining: "+(TOTAL_CODES-codes.length)+" / "+TOTAL_CODES;
+}
+updateRemaining();
+
+function validEmail(email){
+return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 function generateCode(){
 let email=document.getElementById("email").value;
 let msg=document.getElementById("msg");
 
-if(!email || !email.includes("@")){
-msg.innerHTML="Enter a valid email.";
+if(!validEmail(email)){
+msg.innerHTML="<span class='red'>Invalid email.</span>";
 return;
 }
 
-if(used>=totalCodes){
-msg.innerHTML="Early access is full.";
+if(codes.length>=TOTAL_CODES){
+msg.innerHTML="<span class='red'>Early access full.</span>";
 return;
 }
 
-used++;
 let code="RL-"+Math.random().toString(36).substring(2,8).toUpperCase();
-msg.innerHTML="Your exclusive code: "+code+"<br>Access 14 days before launch.";
+codes.push({email:email,code:code,used:false});
+localStorage.setItem("rl_codes",JSON.stringify(codes));
+
+msg.innerHTML="<span class='gold'>Valid Gmail ✔</span><br><span class='gold'>Your code: "+code+"</span>";
+updateRemaining();
+}
+
+function validateCode(){
+let input=document.getElementById("codeInput").value;
+let msg=document.getElementById("msg");
+let shop=document.getElementById("shop");
+
+let found=codes.find(c=>c.code===input && !c.used);
+
+if(!found){
+msg.innerHTML="<span class='red'>Invalid or already used code.</span>";
+return;
+}
+
+found.used=true;
+localStorage.setItem("rl_codes",JSON.stringify(codes));
+
+msg.innerHTML="<span class='gold'>Valid Code ✔ Access Granted</span>";
+shop.classList.add("show");
 }
 
 </script>
