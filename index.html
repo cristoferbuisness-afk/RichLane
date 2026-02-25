@@ -18,11 +18,9 @@ overflow:hidden;
 cursor:none;
 }
 
-/* GOLD & RED */
 .gold{color:#d4af37;}
 .red{color:#ff4d4d;}
 
-/* CURSOR */
 .cursor{
 position:fixed;
 width:20px;
@@ -35,15 +33,13 @@ z-index:9999;
 box-shadow:0 0 15px rgba(212,175,55,.7);
 }
 
-/* BACKGROUND */
 .background{
 position:fixed;
 width:110%;
 height:110%;
 top:-5%;
 left:-5%;
-background:url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
-filter:brightness(.45);
+background:#000;
 z-index:-3;
 }
 
@@ -55,7 +51,6 @@ background:radial-gradient(circle at center, rgba(0,0,0,.4), #000 85%);
 z-index:-1;
 }
 
-/* SECTIONS */
 section{
 position:absolute;
 width:100%;
@@ -75,7 +70,6 @@ pointer-events:none;
 transform:scale(1.05);
 }
 
-/* TEXT */
 .brand{
 font-family:'Playfair Display',serif;
 font-size:60px;
@@ -90,7 +84,6 @@ opacity:.8;
 margin-bottom:20px;
 }
 
-/* BUTTONS */
 button{
 padding:14px 40px;
 border-radius:50px;
@@ -109,7 +102,6 @@ transform:scale(1.07);
 box-shadow:0 0 25px rgba(212,175,55,.6);
 }
 
-/* COUNTDOWN */
 .countdown{
 display:flex;
 gap:15px;
@@ -123,7 +115,6 @@ border-radius:20px;
 min-width:55px;
 }
 
-/* INPUT */
 input{
 padding:12px 20px;
 border-radius:30px;
@@ -134,7 +125,6 @@ text-align:center;
 outline:none;
 }
 
-/* TEXT */
 .message{
 margin-top:10px;
 font-size:14px;
@@ -146,7 +136,6 @@ font-size:12px;
 opacity:.7;
 }
 
-/* SHOP */
 .shop{
 opacity:0;
 transform:scale(.95);
@@ -166,7 +155,6 @@ border-radius:20px;
 margin-top:15px;
 }
 
-/* INSTAGRAM */
 .instagram-link{
 margin-top:25px;
 font-size:14px;
@@ -189,22 +177,17 @@ transform:scale(1.05);
 <div class="background"></div>
 <div class="overlay"></div>
 
-<!-- INTRO -->
 <section id="intro">
 <h1 class="brand">RICH LANE</h1>
 <button onclick="enterSite()">ENTER</button>
 </section>
 
-<!-- EARLY ACCESS -->
 <section id="early" class="hidden">
 <h1 class="brand">RICH LANE</h1>
-<div class="title">EARLY ACCESS</div>
+<div class="title" id="countTitle">EARLY ACCESS</div>
 
 <div class="countdown">
-<div><span id="months">0</span><br>MO</div>
-<div><span id="days">0</span><br>D</div>
-<div><span id="hours">0</span><br>H</div>
-<div><span id="minutes">0</span><br>M</div>
+<div><span id="minutes">5</span><br>M</div>
 <div><span id="seconds">0</span><br>S</div>
 </div>
 
@@ -249,22 +232,31 @@ cursor.style.top=e.pageY+"px";
 function enterSite(){
 document.getElementById("intro").classList.add("hidden");
 document.getElementById("early").classList.remove("hidden");
+startCountdown();
 }
 
-/* COUNTDOWN */
-const dropDate=new Date();
-dropDate.setMonth(dropDate.getMonth()+5);
+/* 5 MINUTE COUNTDOWN */
+let countdownInterval;
 
-setInterval(()=>{
-let now=new Date().getTime();
-let dist=dropDate-now;
+function startCountdown(){
+let timeLeft = 300; // 5 minutes = 300 seconds
 
-document.getElementById("months").innerHTML=Math.floor(dist/(1000*60*60*24*30));
-document.getElementById("days").innerHTML=Math.floor((dist%(1000*60*60*24*30))/(1000*60*60*24));
-document.getElementById("hours").innerHTML=Math.floor((dist%(1000*60*60*24))/(1000*60*60));
-document.getElementById("minutes").innerHTML=Math.floor((dist%(1000*60*60))/(1000*60));
-document.getElementById("seconds").innerHTML=Math.floor((dist%(1000*60))/1000);
+countdownInterval = setInterval(()=>{
+let minutes = Math.floor(timeLeft / 60);
+let seconds = timeLeft % 60;
+
+document.getElementById("minutes").innerHTML = minutes;
+document.getElementById("seconds").innerHTML = seconds;
+
+if(timeLeft <= 0){
+clearInterval(countdownInterval);
+document.getElementById("countTitle").innerHTML = "DROP LIVE";
+document.getElementById("countTitle").classList.add("gold");
+}
+
+timeLeft--;
 },1000);
+}
 
 /* EARLY ACCESS SYSTEM */
 const TOTAL_CODES=150;
