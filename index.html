@@ -12,34 +12,23 @@
 
 body{
 font-family:'Montserrat',sans-serif;
+background:#000;
 color:#fff;
 overflow:hidden;
-background:#000;
 cursor:none;
 }
 
-/* CUSTOM CURSOR */
+/* CUSTOM GOLD CURSOR */
 .cursor{
 position:fixed;
-width:25px;
-height:25px;
+width:24px;
+height:24px;
 border:2px solid #d4af37;
 border-radius:50%;
 pointer-events:none;
 transform:translate(-50%,-50%);
-z-index:99999;
-box-shadow:0 0 15px rgba(212,175,55,.6);
-}
-
-/* PARTICLES */
-.particle{
-position:fixed;
-width:6px;
-height:6px;
-background:#d4af37;
-border-radius:50%;
-pointer-events:none;
 z-index:9999;
+box-shadow:0 0 20px rgba(212,175,55,.6);
 }
 
 /* BACKGROUND */
@@ -50,9 +39,9 @@ height:110%;
 top:-5%;
 left:-5%;
 background:url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
-filter:brightness(0.45);
+filter:brightness(.45);
 z-index:-3;
-transition:transform .2s ease;
+transition:.2s ease;
 }
 
 .overlay{
@@ -63,24 +52,18 @@ background:radial-gradient(circle at center, rgba(0,0,0,.4), #000 85%);
 z-index:-1;
 }
 
-/* FOG */
 .fog{
 position:fixed;
 width:200%;
 height:200%;
 top:-50%;
 left:-50%;
-background:radial-gradient(circle at center, rgba(255,255,255,.05) 10%, transparent 60%);
+background:radial-gradient(circle at center, rgba(255,255,255,.06), transparent 60%);
 z-index:-2;
-transition:transform .3s ease;
-animation:fogMove 80s linear infinite;
+transition:.3s ease;
 }
 
-@keyframes fogMove{
-0%{transform:translateX(0)}
-100%{transform:translateX(-15%)}
-}
-
+/* SECTIONS */
 section{
 position:absolute;
 width:100%;
@@ -90,8 +73,8 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-padding:20px;
 transition:1.2s ease;
+padding:20px;
 }
 
 .hidden{
@@ -100,19 +83,27 @@ pointer-events:none;
 transform:scale(1.05);
 }
 
-h1{
+/* TEXT */
+.brand{
 font-family:'Playfair Display',serif;
 font-size:60px;
-letter-spacing:8px;
+letter-spacing:10px;
+margin-bottom:10px;
+}
+
+.title{
+font-size:20px;
+letter-spacing:6px;
+opacity:.8;
+margin-bottom:25px;
 }
 
 .enter-btn, button{
-margin-top:30px;
-padding:15px 50px;
+padding:14px 45px;
 border-radius:50px;
 border:none;
-font-size:14px;
-letter-spacing:4px;
+font-size:13px;
+letter-spacing:3px;
 cursor:pointer;
 background:linear-gradient(45deg,#d4af37,#f5d77a);
 color:#000;
@@ -127,23 +118,52 @@ box-shadow:0 0 30px rgba(212,175,55,.6);
 .countdown{
 display:flex;
 gap:15px;
-margin:30px 0;
+margin:25px 0;
 }
 
 .countdown div{
 background:rgba(255,255,255,.05);
 padding:15px 20px;
 border-radius:20px;
+min-width:60px;
 }
 
+input{
+padding:12px 20px;
+border-radius:30px;
+border:none;
+margin-top:15px;
+width:260px;
+text-align:center;
+outline:none;
+}
+
+.message{
+margin-top:15px;
+font-size:13px;
+opacity:.9;
+}
+
+/* GLITCH */
 .glitch{
-animation:glitchFlash .2s infinite;
+animation:glitch .2s infinite;
 }
 
-@keyframes glitchFlash{
+@keyframes glitch{
 0%{transform:translate(2px,-2px)}
 50%{transform:translate(-2px,2px)}
 100%{transform:translate(0)}
+}
+
+/* PARTICLES */
+.particle{
+position:fixed;
+width:6px;
+height:6px;
+background:#d4af37;
+border-radius:50%;
+pointer-events:none;
+z-index:999;
 }
 </style>
 </head>
@@ -154,13 +174,16 @@ animation:glitchFlash .2s infinite;
 <div class="fog" id="fog"></div>
 <div class="overlay"></div>
 
+<!-- INTRO -->
 <section id="intro">
-<h1>RICH LANE</h1>
+<h1 class="brand">RICH LANE</h1>
 <button class="enter-btn" onclick="enterSite()">ENTER</button>
 </section>
 
+<!-- EARLY ACCESS -->
 <section id="early" class="hidden">
-<h1 id="mainTitle">EARLY ACCESS</h1>
+<h1 class="brand">RICH LANE</h1>
+<div class="title">EARLY ACCESS</div>
 
 <div class="countdown">
 <div><span id="months">0</span><br>MO</div>
@@ -169,6 +192,11 @@ animation:glitchFlash .2s infinite;
 <div><span id="minutes">0</span><br>M</div>
 <div><span id="seconds">0</span><br>S</div>
 </div>
+
+<input type="email" id="email" placeholder="Enter your email">
+<br>
+<button onclick="generateCode()">Request Early Access</button>
+<div class="message" id="msg"></div>
 </section>
 
 <script>
@@ -180,18 +208,19 @@ cursor.style.left=e.pageX+"px";
 cursor.style.top=e.pageY+"px";
 });
 
-/* PARALLAX */
+/* PARALLAX + FOG */
+const bg=document.getElementById("bg");
+const fog=document.getElementById("fog");
+
 document.addEventListener("mousemove",e=>{
 let x=(window.innerWidth/2 - e.pageX)/40;
 let y=(window.innerHeight/2 - e.pageY)/40;
-document.getElementById("bg").style.transform=
-"translate("+x+"px,"+y+"px) scale(1.05)";
-document.getElementById("fog").style.transform=
-"translate("+x*2+"px,"+y*2+"px)";
+bg.style.transform=`translate(${x}px,${y}px) scale(1.05)`;
+fog.style.transform=`translate(${x*2}px,${y*2}px)`;
 });
 
-/* GOLD PARTICLE EXPLOSION */
-function explodeParticles(x,y){
+/* PARTICLE EXPLOSION */
+function explode(x,y){
 for(let i=0;i<40;i++){
 let p=document.createElement("div");
 p.className="particle";
@@ -199,62 +228,84 @@ document.body.appendChild(p);
 p.style.left=x+"px";
 p.style.top=y+"px";
 let angle=Math.random()*2*Math.PI;
-let distance=100+Math.random()*100;
-let dx=Math.cos(angle)*distance;
-let dy=Math.sin(angle)*distance;
-p.animate([
-{transform:"translate(0,0)",opacity:1},
-{transform:"translate("+dx+"px,"+dy+"px)",opacity:0}
-],{duration:1000,easing:"ease-out"});
+let dist=80+Math.random()*120;
+let dx=Math.cos(angle)*dist;
+let dy=Math.sin(angle)*dist;
+p.animate([{transform:"translate(0,0)",opacity:1},
+{transform:`translate(${dx}px,${dy}px)`,opacity:0}],
+{duration:1000,easing:"ease-out"});
 setTimeout(()=>p.remove(),1000);
 }
 }
 
-/* CINEMATIC BASS + HEARTBEAT */
-let audioCtx;
-function startHeartbeat(){
-audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+/* HEARTBEAT SOUND */
+function heartbeat(){
+let ctx=new (window.AudioContext||window.webkitAudioContext)();
 setInterval(()=>{
-let osc=audioCtx.createOscillator();
-let gain=audioCtx.createGain();
-osc.frequency.value=50;
+let osc=ctx.createOscillator();
+let gain=ctx.createGain();
+osc.frequency.value=45;
 gain.gain.value=.4;
-gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+.5);
+gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+.5);
 osc.connect(gain);
-gain.connect(audioCtx.destination);
+gain.connect(ctx.destination);
 osc.start();
-osc.stop(audioCtx.currentTime+.5);
+osc.stop(ctx.currentTime+.5);
 },2000);
 }
 
-function enterSite(e){
-explodeParticles(window.innerWidth/2,window.innerHeight/2);
-startHeartbeat();
-document.getElementById("intro").classList.add("hidden");
-document.getElementById("early").classList.remove("hidden");
+/* ENTER */
+function enterSite(){
+explode(window.innerWidth/2,window.innerHeight/2);
+heartbeat();
+intro.classList.add("hidden");
+early.classList.remove("hidden");
 }
 
-/* COUNTDOWN */
-const dropDate=new Date("July 1, 2026 18:00:00").getTime();
+/* COUNTDOWN 5 MONTHS FROM NOW */
+const dropDate=new Date();
+dropDate.setMonth(dropDate.getMonth()+5);
 
-setInterval(function(){
-const now=new Date().getTime();
-const distance=dropDate-now;
+setInterval(()=>{
+let now=new Date().getTime();
+let dist=dropDate-now;
 
-if(distance<=0){
-document.getElementById("mainTitle").classList.add("glitch");
+if(dist<=0){
+document.querySelector(".title").classList.add("glitch");
 return;
 }
 
-document.getElementById("months").innerHTML=Math.floor(distance/(1000*60*60*24*30));
-document.getElementById("days").innerHTML=Math.floor((distance%(1000*60*60*24*30))/(1000*60*60*24));
-document.getElementById("hours").innerHTML=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-document.getElementById("minutes").innerHTML=Math.floor((distance%(1000*60*60))/(1000*60));
-document.getElementById("seconds").innerHTML=Math.floor((distance%(1000*60))/1000);
+months.innerHTML=Math.floor(dist/(1000*60*60*24*30));
+days.innerHTML=Math.floor((dist%(1000*60*60*24*30))/(1000*60*60*24));
+hours.innerHTML=Math.floor((dist%(1000*60*60*24))/(1000*60*60));
+minutes.innerHTML=Math.floor((dist%(1000*60*60))/(1000*60));
+seconds.innerHTML=Math.floor((dist%(1000*60))/1000);
 
 },1000);
 
-</script>
+/* EARLY ACCESS CODES */
+let totalCodes=333;
+let used=0;
 
+function generateCode(){
+let email=document.getElementById("email").value;
+let msg=document.getElementById("msg");
+
+if(!email || !email.includes("@")){
+msg.innerHTML="Enter a valid email.";
+return;
+}
+
+if(used>=totalCodes){
+msg.innerHTML="Early access is full.";
+return;
+}
+
+used++;
+let code="RL-"+Math.random().toString(36).substring(2,8).toUpperCase();
+msg.innerHTML="Your exclusive code: "+code+"<br>Access 14 days before launch.";
+}
+
+</script>
 </body>
 </html>
