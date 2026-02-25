@@ -3,112 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rich Lane | Early Access</title>
+<title>Rich Lane</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{
-background:#000;
-color:#fff;
 font-family:'Montserrat',sans-serif;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-text-align:center;
-padding:20px;
+color:#fff;
 overflow:hidden;
+background:#000;
 }
 
-.container{max-width:600px;animation:fadeUp 1.5s ease forwards;opacity:0}
+/* BACKGROUND */
+.background{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
+filter:brightness(0.5);
+z-index:-2;
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:radial-gradient(circle at center, rgba(0,0,0,0.4), #000 80%);
+z-index:-1;
+}
+
+/* GENERAL */
+section{
+position:absolute;
+width:100%;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+transition:1s ease;
+}
+
+.hidden{
+opacity:0;
+pointer-events:none;
+transform:translateY(20px);
+}
 
 h1{
 font-family:'Playfair Display',serif;
-font-size:42px;
-letter-spacing:6px;
-margin-bottom:10px;
+font-size:60px;
+letter-spacing:8px;
+position:relative;
 }
 
-.subtitle{
-color:#aaa;
-margin-bottom:30px;
-letter-spacing:2px;
-font-size:12px;
+/* SUBTLE GLITCH */
+h1::before, h1::after{
+content:attr(data-text);
+position:absolute;
+left:0;
+width:100%;
+opacity:0.6;
 }
 
+h1::before{
+color:#d4af37;
+animation:glitch 2s infinite;
+}
+
+@keyframes glitch{
+0%{transform:translate(0)}
+20%{transform:translate(-2px,2px)}
+40%{transform:translate(-2px,-2px)}
+60%{transform:translate(2px,2px)}
+80%{transform:translate(2px,-2px)}
+100%{transform:translate(0)}
+}
+
+.tagline{
+letter-spacing:3px;
+margin-top:15px;
+color:#ccc;
+}
+
+/* BUTTON */
+button{
+margin-top:40px;
+padding:15px 40px;
+border-radius:50px;
+border:none;
+font-size:14px;
+letter-spacing:3px;
+cursor:pointer;
+background:linear-gradient(45deg,#d4af37,#f5d77a);
+color:#000;
+transition:.4s;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 25px rgba(212,175,55,0.6);
+}
+
+/* COUNTDOWN */
 .countdown{
 display:flex;
 flex-wrap:wrap;
-justify-content:center;
 gap:15px;
-margin-bottom:40px;
+justify-content:center;
+margin:30px 0;
 }
 
 .countdown div{
-background:#111;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
 padding:15px 20px;
-border:1px solid #222;
-font-size:14px;
-letter-spacing:2px;
+border-radius:20px;
 min-width:90px;
 }
 
 input{
-width:100%;
 padding:15px;
-background:#111;
-border:1px solid #333;
-color:#fff;
-margin-bottom:15px;
-letter-spacing:2px;
-text-align:center;
-}
-
-button{
-width:100%;
-padding:15px;
-background:#fff;
+width:280px;
+border-radius:30px;
 border:none;
-color:#000;
-letter-spacing:3px;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{background:#d4af37}
-
-.message{
-margin-top:15px;
-font-size:12px;
-letter-spacing:2px;
-color:#d4af37;
-min-height:20px;
+margin:10px 0;
+text-align:center;
+outline:none;
 }
 
 .spots{
-margin-bottom:20px;
-font-size:12px;
+font-size:13px;
+color:#d4af37;
 letter-spacing:2px;
-color:#aaa;
 }
 
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(30px)}
-to{opacity:1;transform:translateY(0)}
+.message{
+margin-top:10px;
+min-height:20px;
+color:#d4af37;
+letter-spacing:2px;
+}
+
+.small{
+font-size:12px;
+color:#aaa;
+margin-top:15px;
 }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="background"></div>
+<div class="overlay"></div>
 
-<h1>EARLY ACCESS</h1>
-<div class="subtitle">LIMITED PRIVATE MEMBERS</div>
+<!-- INTRO PAGE -->
+<section id="intro">
 
+<h1 data-text="RICH LANE">RICH LANE</h1>
+<div class="tagline">DISCIPLINE. PRECISION. POSITION.</div>
+
+<button onclick="enterSite()">ENTER</button>
+
+</section>
+
+<!-- EARLY ACCESS PAGE -->
+<section id="early" class="hidden">
+
+<h1 data-text="EARLY ACCESS">EARLY ACCESS</h1>
 <div class="spots">
-<span id="spotsLeft">150</span> / 150 SPOTS AVAILABLE
+<span id="spotsLeft">150</span> / 150 PRIVATE SPOTS
 </div>
 
 <div class="countdown">
@@ -120,104 +191,101 @@ to{opacity:1;transform:translateY(0)}
 </div>
 
 <input type="email" id="emailInput" placeholder="ENTER YOUR GMAIL">
-<button onclick="generateCode()">GET EARLY ACCESS CODE</button>
+<button onclick="generateCode()">GET ACCESS CODE</button>
 
-<input type="text" id="codeInput" placeholder="ENTER CODE (14 DAYS BEFORE DROP)">
-<button onclick="unlock()">UNLOCK PRIVATE STORE</button>
+<input type="text" id="codeInput" placeholder="ENTER CODE">
+<button onclick="unlock()">UNLOCK</button>
 
 <div class="message" id="message"></div>
 
+<div class="small">
+Early members enter 14 days before public release.<br>
+<a href="https://www.instagram.com/richlaneco/" target="_blank" style="color:#d4af37;text-decoration:none;">
+@RichLaneCo
+</a>
 </div>
+
+</section>
 
 <script>
 
-// ===== SETTINGS =====
+/* PAGE TRANSITION */
+function enterSite(){
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("early").classList.remove("hidden");
+}
 
-// OFFICIAL DROP DATE (5 månader framåt exempel)
+/* SETTINGS */
 const dropDate = new Date("July 1, 2026 18:00:00").getTime();
-
-// Early access unlock = 14 dagar innan
-const earlyAccessDate = dropDate - (14 * 24 * 60 * 60 * 1000);
-
-// Max early spots
+const earlyAccessDate = dropDate - (14*24*60*60*1000);
 const maxSpots = 150;
 
-// ===== SPOTS SYSTEM =====
 let usedSpots = localStorage.getItem("usedSpots");
-if(!usedSpots){
-usedSpots = 0;
-localStorage.setItem("usedSpots", 0);
-}
+if(!usedSpots){usedSpots=0;localStorage.setItem("usedSpots",0);}
 document.getElementById("spotsLeft").innerHTML = maxSpots - usedSpots;
 
-// ===== COUNTDOWN =====
+/* COUNTDOWN */
 setInterval(function(){
-
 const now = new Date().getTime();
 const distance = dropDate - now;
 
-const months = Math.floor(distance / (1000*60*60*24*30));
-const days = Math.floor((distance % (1000*60*60*24*30)) / (1000*60*60*24));
-const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
-const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
-const seconds = Math.floor((distance % (1000*60)) / 1000);
+const months = Math.floor(distance/(1000*60*60*24*30));
+const days = Math.floor((distance%(1000*60*60*24*30))/(1000*60*60*24));
+const hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+const seconds = Math.floor((distance%(1000*60))/1000);
 
-document.getElementById("months").innerHTML = months;
-document.getElementById("days").innerHTML = days;
-document.getElementById("hours").innerHTML = hours;
-document.getElementById("minutes").innerHTML = minutes;
-document.getElementById("seconds").innerHTML = seconds;
-
+document.getElementById("months").innerHTML=months;
+document.getElementById("days").innerHTML=days;
+document.getElementById("hours").innerHTML=hours;
+document.getElementById("minutes").innerHTML=minutes;
+document.getElementById("seconds").innerHTML=seconds;
 },1000);
 
-// ===== GENERATE CODE =====
+/* GENERATE CODE */
 function generateCode(){
+let currentSpots=parseInt(localStorage.getItem("usedSpots"));
 
-let currentSpots = parseInt(localStorage.getItem("usedSpots"));
-
-if(currentSpots >= maxSpots){
+if(currentSpots>=maxSpots){
 document.getElementById("message").innerHTML="EARLY ACCESS FULL";
 return;
 }
 
-const email = document.getElementById("emailInput").value;
+const email=document.getElementById("emailInput").value;
 
 if(!email.includes("@gmail.com")){
 document.getElementById("message").innerHTML="USE VALID GMAIL";
 return;
 }
 
-const code = "RL-" + btoa(email).substring(0,6).toUpperCase();
-
-localStorage.setItem("userCode", code);
+const code="RL-"+btoa(email).substring(0,6).toUpperCase();
+localStorage.setItem("userCode",code);
 
 currentSpots++;
-localStorage.setItem("usedSpots", currentSpots);
-document.getElementById("spotsLeft").innerHTML = maxSpots - currentSpots;
+localStorage.setItem("usedSpots",currentSpots);
+document.getElementById("spotsLeft").innerHTML=maxSpots-currentSpots;
 
-document.getElementById("message").innerHTML="YOUR EARLY CODE: " + code;
+document.getElementById("message").innerHTML="YOUR CODE: "+code;
 }
 
-// ===== UNLOCK =====
+/* UNLOCK */
 function unlock(){
+const now=new Date().getTime();
 
-const now = new Date().getTime();
-
-if(now < earlyAccessDate){
-document.getElementById("message").innerHTML="EARLY ACCESS OPENS 14 DAYS BEFORE DROP";
+if(now<earlyAccessDate){
+document.getElementById("message").innerHTML="OPENS 14 DAYS BEFORE DROP";
 return;
 }
 
-const entered = document.getElementById("codeInput").value;
-const saved = localStorage.getItem("userCode");
+const entered=document.getElementById("codeInput").value;
+const saved=localStorage.getItem("userCode");
 
-if(entered === saved){
+if(entered===saved){
 window.location.href="https://www.instagram.com/richlaneco/";
 }else{
 document.getElementById("message").innerHTML="INVALID CODE";
 }
 }
-
 </script>
 
 </body>
