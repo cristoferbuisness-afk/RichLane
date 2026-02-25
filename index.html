@@ -33,9 +33,49 @@
     <h1>RICH LANE</h1>
     <p>Discipline. Precision. Position.</p>
     <p>Not for everyone.</p>
-    <p style="margin-top:20px; opacity:0.5; letter-spacing:2px;">
-  COMING SOON
-</p>
+    <style>
+  body {
+    margin: 0;
+    background-color: black;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 48px;
+    letter-spacing: 6px;
+  }
+
+  p {
+    font-size: 18px;
+    opacity: 0.8;
+    margin-top: 10px;
+  }
+
+  .coming-soon {
+    margin-top: 25px;
+    opacity: 0;
+    letter-spacing: 3px;
+    animation: fadeUp 2s ease forwards;
+    animation-delay: 1.5s;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 0.5;
+      transform: translateY(0);
+    }
+  }
+</style>
   </div>
 </body>
 </html>
