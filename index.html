@@ -1,89 +1,224 @@
-<!doctype html>
-<html class="no-js" lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rich Lane | Early Access</title>
 
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Rich Lane</title>
-
-<meta name="description" content="Rich Lane represents discipline, focus, and earned position. Premium apparel for those who lead with confidence and move with intention. Not for everyone.">
-
-<link rel="canonical" href="https://cristoferbuisness-afk.github.io/RichLane/">
-
-<link rel="shortcut icon" type="image/x-icon" href="Rich Lane clothes Photo Clouds.png">
-<link rel="apple-touch-icon" href="Rich Lane clothes Photo Clouds.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-body {
-    margin: 0;
-    background-color: black;
-    color: white;
-    font-family: Helvetica, Arial, sans-serif;
-    overflow: hidden;
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+background:#000;
+color:#fff;
+font-family:'Montserrat',sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+text-align:center;
+padding:20px;
+overflow:hidden;
 }
 
-.hero {
-    position: relative;
-    height: 100vh;
-    background: url("Rich Lane clothes Photo Clouds.png") center/cover no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.container{max-width:600px;animation:fadeUp 1.5s ease forwards;opacity:0}
+
+h1{
+font-family:'Playfair Display',serif;
+font-size:42px;
+letter-spacing:6px;
+margin-bottom:10px;
 }
 
-.overlay {
-    background: rgba(0,0,0,0.6);
-    position: absolute;
-    inset: 0;
+.subtitle{
+color:#aaa;
+margin-bottom:30px;
+letter-spacing:2px;
+font-size:12px;
 }
 
-.content {
-    position: relative;
-    z-index: 2;
-    animation: fadeIn 2s ease forwards;
+.countdown{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+margin-bottom:40px;
 }
 
-h1 {
-    font-size: 64px;
-    letter-spacing: 10px;
-    margin: 0;
+.countdown div{
+background:#111;
+padding:15px 20px;
+border:1px solid #222;
+font-size:14px;
+letter-spacing:2px;
+min-width:90px;
 }
 
-p {
-    font-size: 18px;
-    margin-top: 15px;
-    opacity: 0.85;
+input{
+width:100%;
+padding:15px;
+background:#111;
+border:1px solid #333;
+color:#fff;
+margin-bottom:15px;
+letter-spacing:2px;
+text-align:center;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+button{
+width:100%;
+padding:15px;
+background:#fff;
+border:none;
+color:#000;
+letter-spacing:3px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{background:#d4af37}
+
+.message{
+margin-top:15px;
+font-size:12px;
+letter-spacing:2px;
+color:#d4af37;
+min-height:20px;
+}
+
+.spots{
+margin-bottom:20px;
+font-size:12px;
+letter-spacing:2px;
+color:#aaa;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(30px)}
+to{opacity:1;transform:translateY(0)}
 }
 </style>
-
 </head>
-
 <body>
 
-<div class="hero">
-    <div class="overlay"></div>
+<div class="container">
 
-    <div class="content">
-        <h1>RICH LANE</h1>
-        <p>Discipline. Precision. Position.</p>
-        <p>Not for everyone.</p>
-    </div>
+<h1>EARLY ACCESS</h1>
+<div class="subtitle">LIMITED PRIVATE MEMBERS</div>
+
+<div class="spots">
+<span id="spotsLeft">150</span> / 150 SPOTS AVAILABLE
 </div>
+
+<div class="countdown">
+<div><span id="months">0</span><br>MONTHS</div>
+<div><span id="days">0</span><br>DAYS</div>
+<div><span id="hours">0</span><br>HRS</div>
+<div><span id="minutes">0</span><br>MIN</div>
+<div><span id="seconds">0</span><br>SEC</div>
+</div>
+
+<input type="email" id="emailInput" placeholder="ENTER YOUR GMAIL">
+<button onclick="generateCode()">GET EARLY ACCESS CODE</button>
+
+<input type="text" id="codeInput" placeholder="ENTER CODE (14 DAYS BEFORE DROP)">
+<button onclick="unlock()">UNLOCK PRIVATE STORE</button>
+
+<div class="message" id="message"></div>
+
+</div>
+
+<script>
+
+// ===== SETTINGS =====
+
+// OFFICIAL DROP DATE (5 månader framåt exempel)
+const dropDate = new Date("July 1, 2026 18:00:00").getTime();
+
+// Early access unlock = 14 dagar innan
+const earlyAccessDate = dropDate - (14 * 24 * 60 * 60 * 1000);
+
+// Max early spots
+const maxSpots = 150;
+
+// ===== SPOTS SYSTEM =====
+let usedSpots = localStorage.getItem("usedSpots");
+if(!usedSpots){
+usedSpots = 0;
+localStorage.setItem("usedSpots", 0);
+}
+document.getElementById("spotsLeft").innerHTML = maxSpots - usedSpots;
+
+// ===== COUNTDOWN =====
+setInterval(function(){
+
+const now = new Date().getTime();
+const distance = dropDate - now;
+
+const months = Math.floor(distance / (1000*60*60*24*30));
+const days = Math.floor((distance % (1000*60*60*24*30)) / (1000*60*60*24));
+const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+const seconds = Math.floor((distance % (1000*60)) / 1000);
+
+document.getElementById("months").innerHTML = months;
+document.getElementById("days").innerHTML = days;
+document.getElementById("hours").innerHTML = hours;
+document.getElementById("minutes").innerHTML = minutes;
+document.getElementById("seconds").innerHTML = seconds;
+
+},1000);
+
+// ===== GENERATE CODE =====
+function generateCode(){
+
+let currentSpots = parseInt(localStorage.getItem("usedSpots"));
+
+if(currentSpots >= maxSpots){
+document.getElementById("message").innerHTML="EARLY ACCESS FULL";
+return;
+}
+
+const email = document.getElementById("emailInput").value;
+
+if(!email.includes("@gmail.com")){
+document.getElementById("message").innerHTML="USE VALID GMAIL";
+return;
+}
+
+const code = "RL-" + btoa(email).substring(0,6).toUpperCase();
+
+localStorage.setItem("userCode", code);
+
+currentSpots++;
+localStorage.setItem("usedSpots", currentSpots);
+document.getElementById("spotsLeft").innerHTML = maxSpots - currentSpots;
+
+document.getElementById("message").innerHTML="YOUR EARLY CODE: " + code;
+}
+
+// ===== UNLOCK =====
+function unlock(){
+
+const now = new Date().getTime();
+
+if(now < earlyAccessDate){
+document.getElementById("message").innerHTML="EARLY ACCESS OPENS 14 DAYS BEFORE DROP";
+return;
+}
+
+const entered = document.getElementById("codeInput").value;
+const saved = localStorage.getItem("userCode");
+
+if(entered === saved){
+window.location.href="https://www.instagram.com/richlaneco/";
+}else{
+document.getElementById("message").innerHTML="INVALID CODE";
+}
+}
+
+</script>
 
 </body>
 </html>
